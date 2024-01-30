@@ -107,12 +107,19 @@ function RegisterForm() {
         </Alert>
       )}
 
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      )}
+
       <Wrap>
         <Button colorScheme="blue" type="submit" isLoading={isLoading}>
-          Login
-        </Button>
-        <Button as={Link} to="/register" variant="ghost">
           Register
+        </Button>
+        <Button as={Link} to="/login" variant="ghost">
+          Login
         </Button>
       </Wrap>
     </Stack>

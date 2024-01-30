@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "../../redux/auth/authActions";
 import { registerService } from "../../services/authServices";
 import { useState } from "react";
+import InputField from "../InputField";
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -66,52 +67,37 @@ function RegisterForm() {
 
   return (
     <Stack as="form" onSubmit={formik.handleSubmit}>
-      <FormControl
-        isRequired
-        isInvalid={!!formik.errors.username && formik.touched.username}
-      >
-        <FormLabel>Username</FormLabel>
-        <Input placeholder="Username" {...formik.getFieldProps("username")} />
-        <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
-      </FormControl>
-
-      <FormControl
-        isRequired
-        isInvalid={!!formik.errors.password && formik.touched.password}
-      >
-        <FormLabel>Password</FormLabel>
-        <Input
-          placeholder="Password"
-          type="password"
-          {...formik.getFieldProps("password")}
-        />
-        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-      </FormControl>
+      <InputField
+        label="Username"
+        placeholder="Username"
+        required
+        meta={formik.getFieldMeta("username")}
+        {...formik.getFieldProps("username")}
+      />
+      <InputField
+        label="Password"
+        placeholder="Password"
+        required
+        meta={formik.getFieldMeta("password")}
+        {...formik.getFieldProps("password")}
+        type="password"
+      />
 
       <ButtonGroup>
-        <FormControl
-          isRequired
-          isInvalid={!!formik.errors.firstName && formik.touched.firstName}
-        >
-          <FormLabel>First Name</FormLabel>
-          <Input
-            placeholder="First Name"
-            {...formik.getFieldProps("firstName")}
-          />
-          <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl
-          isRequired
-          isInvalid={!!formik.errors.lastName && formik.touched.lastName}
-        >
-          <FormLabel>Last Name</FormLabel>
-          <Input
-            placeholder="Last Name"
-            {...formik.getFieldProps("lastName")}
-          />
-          <FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
-        </FormControl>
+        <InputField
+          label="First Name"
+          placeholder="First Name"
+          required
+          meta={formik.getFieldMeta("firstName")}
+          {...formik.getFieldProps("firstName")}
+        />
+        <InputField
+          label="Last Name"
+          placeholder="Last Name"
+          required
+          meta={formik.getFieldMeta("lastName")}
+          {...formik.getFieldProps("lastName")}
+        />
       </ButtonGroup>
 
       {error && (
@@ -123,10 +109,10 @@ function RegisterForm() {
 
       <Wrap>
         <Button colorScheme="blue" type="submit" isLoading={isLoading}>
-          Register
-        </Button>
-        <Button as={Link} to="/login" variant="ghost">
           Login
+        </Button>
+        <Button as={Link} to="/register" variant="ghost">
+          Register
         </Button>
       </Wrap>
     </Stack>

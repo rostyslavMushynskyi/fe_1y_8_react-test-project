@@ -9,15 +9,15 @@ import {
   Alert,
   AlertIcon,
   ButtonGroup,
+  useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../redux/auth/authActions";
 import { registerService } from "../../services/authServices";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -31,8 +31,9 @@ const validationSchema = yup.object().shape({
 });
 
 function RegisterForm() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -53,6 +54,10 @@ function RegisterForm() {
         .then((data) => {
           dispatch(loginAction(data));
           navigate("/feed");
+          toast({
+            title: "Registration successful!",
+            status: "success",
+          });
         })
         .catch((err) => setError(err.response.data.message))
         .finally(() => setIsLoading(false));
@@ -69,20 +74,20 @@ function RegisterForm() {
         <Input placeholder="Username" {...formik.getFieldProps("username")} />
         <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
       </FormControl>
-      <ButtonGroup>
-        <FormControl
-          isRequired
-          isInvalid={!!formik.errors.password && formik.touched.password}
-        >
-          <FormLabel>Password</FormLabel>
-          <Input
-            placeholder="Password"
-            type="password"
-            {...formik.getFieldProps("password")}
-          />
-          <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-        </FormControl>
-      </ButtonGroup>
+
+      <FormControl
+        isRequired
+        isInvalid={!!formik.errors.password && formik.touched.password}
+      >
+        <FormLabel>Password</FormLabel>
+        <Input
+          placeholder="Password"
+          type="password"
+          {...formik.getFieldProps("password")}
+        />
+        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+      </FormControl>
+
       <ButtonGroup>
         <FormControl
           isRequired

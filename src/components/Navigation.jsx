@@ -5,12 +5,12 @@ import {
   IconButton,
   useColorMode,
   Stack,
-} from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
-import { RxExit } from "react-icons/rx";
-import NavigationLink from "./NavigationLink";
-import { useDispatch } from "react-redux";
-import { logoutAction } from "../redux/auth/authActions";
+} from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
+import { RxExit } from 'react-icons/rx';
+import NavigationLink from './NavigationLink';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../redux/auth/authActions';
 
 function Navigation() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -26,7 +26,7 @@ function Navigation() {
         <Heading>Blog</Heading>
         <ButtonGroup>
           <IconButton
-            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             aria-label="Toggle theme"
             variant="ghost"
             onClick={toggleColorMode}

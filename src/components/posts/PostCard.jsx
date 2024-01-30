@@ -11,10 +11,10 @@ import {
   Image,
   CardFooter,
   Button,
-} from "@chakra-ui/react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike, BiShare } from "react-icons/bi";
-import PropTypes from "prop-types";
+} from '@chakra-ui/react';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BiLike, BiShare } from 'react-icons/bi';
+import PropTypes from 'prop-types';
 
 function PostCard({ title, excerpt, author }) {
   return (
@@ -25,7 +25,7 @@ function PostCard({ title, excerpt, author }) {
             <Avatar name={author.fullName} src={author.avatar || undefined} />
 
             <Box>
-              <Heading size="sm">{author.fullName || "-"}</Heading>
+              <Heading size="sm">{author.fullName || '-'}</Heading>
               <Text>@{author.username}</Text>
             </Box>
           </Flex>
@@ -41,7 +41,7 @@ function PostCard({ title, excerpt, author }) {
         <Heading mb="8px" size="lg">
           {title}
         </Heading>
-        <Text>{excerpt}...</Text>
+        <Text>{excerpt}</Text>
       </CardBody>
       <Image
         objectFit="cover"
@@ -53,8 +53,8 @@ function PostCard({ title, excerpt, author }) {
         justify="space-between"
         flexWrap="wrap"
         sx={{
-          "& > button": {
-            minW: "136px",
+          '& > button': {
+            minW: '136px',
           },
         }}
       >

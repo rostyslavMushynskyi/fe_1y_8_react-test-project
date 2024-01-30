@@ -1,6 +1,6 @@
-import { Stack } from "@chakra-ui/react";
-import PropTypes from "prop-types";
-import PostCard from "./PostCard";
+import { Stack } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import PostCard from './PostCard';
 
 function PostsList({ posts }) {
   return (

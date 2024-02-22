@@ -1,9 +1,11 @@
 import { useFormik } from "formik";
+import PropTypes from "prop-types";
 import * as yup from "yup";
 import { Stack, Button } from "@chakra-ui/react";
 import InputField from "../InputField";
-import { createPostService } from "../../services/postsServices";
+import { editPostService } from "../../services/postsServices";
 import PostBodyField from "./PostBodyField";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
@@ -14,7 +16,7 @@ const schema = yup.object().shape({
   body: yup.string().min(3).required(),
 });
 
-function CreatePostForm() {
+function EditPostForm({ post }) {
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -27,11 +29,29 @@ function CreatePostForm() {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      createPostService(values).then((post) => {
-        navigate(`/posts/${post.id}`);
-      });
+      editPostService(post.id, values).then(() =>
+        navigate(`/posts/${post.id}`)
+      );
     },
   });
+
+  const { resetForm } = formik;
+
+  useEffect(() => {
+    if (!post) {
+      return;
+    }
+
+    resetForm({
+      values: {
+        title: post.title,
+        category: post.category || "",
+        excerpt: post.excerpt,
+        image: post.image || "",
+        body: post.body,
+      },
+    });
+  }, [post, resetForm]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -71,12 +91,16 @@ function CreatePostForm() {
           {...formik.getFieldProps("body")}
         />
 
-        <Button type="submit" colorScheme="blue">
-          Create Post
+        <Button type="submit" colorScheme="blue" isDisabled={!post}>
+          Edit Post
         </Button>
       </Stack>
     </form>
   );
 }
 
-export default CreatePostForm;
+EditPostForm.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+export default EditPostForm;

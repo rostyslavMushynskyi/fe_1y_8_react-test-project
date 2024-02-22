@@ -1,6 +1,6 @@
-import { NavLink } from 'react-router-dom';
-import { Button } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
+import { NavLink } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 function NavigationLink({ children, ...props }) {
   return (
@@ -11,10 +11,10 @@ function NavigationLink({ children, ...props }) {
       borderRadius="3xl"
       size="lg"
       sx={{
-        '&.active': {
-          bgColor: 'blue.500',
-          '&:hover': {
-            bgColor: 'blue.600',
+        "&.active": {
+          bgColor: "blue.500",
+          "&:hover": {
+            bgColor: "blue.600",
           },
         },
       }}

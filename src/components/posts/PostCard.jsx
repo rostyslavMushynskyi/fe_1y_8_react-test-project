@@ -11,12 +11,63 @@ import {
   Image,
   CardFooter,
   Button,
-} from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { BiLike, BiShare } from 'react-icons/bi';
-import PropTypes from 'prop-types';
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Spinner,
+} from "@chakra-ui/react";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { BiLike, BiShare } from "react-icons/bi";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import {
+  likePostService,
+  deletePostService,
+} from "../../services/postsServices";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSelectors";
+import { formatPostDate } from "../../utils/formatPostDate";
 
-function PostCard({ title, excerpt, author }) {
+// TODO: Add id, onLike to prop types
+function PostCard({
+  title,
+  excerpt,
+  author,
+  image,
+  id,
+  onLike,
+  isLiked,
+  likesCount,
+  onDelete,
+  createdAt,
+}) {
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const user = useSelector(selectUser);
+
+  function handleLikeClick() {
+    setIsLikeLoading(true);
+
+    likePostService(id)
+      .then((post) => {
+        onLike(post);
+      })
+      .finally(() => setIsLikeLoading(false));
+  }
+
+  function handleDeleteClick() {
+    setIsDeleting(true);
+
+    deletePostService(id)
+      .then(() => {
+        onDelete(id);
+      })
+      .finally(() => setIsDeleting(false));
+  }
+
   return (
     <Card>
       <CardHeader pb={0}>
@@ -25,41 +76,68 @@ function PostCard({ title, excerpt, author }) {
             <Avatar name={author.fullName} src={author.avatar || undefined} />
 
             <Box>
-              <Heading size="sm">{author.fullName || '-'}</Heading>
-              <Text>@{author.username}</Text>
+              <Heading size="sm">{author.fullName || "-"}</Heading>
+              <Text as={Link} to={`/users/${author.id}`}>
+                @{author.username}
+              </Text>
             </Box>
+
+            <Text fontSize="sm" fontWeight={500}>
+              {formatPostDate(createdAt)}
+            </Text>
           </Flex>
-          <IconButton
-            variant="ghost"
-            colorScheme="gray"
-            aria-label="See menu"
-            icon={<BsThreeDotsVertical />}
-          />
+
+          {author.id === user.id &&
+            (!isDeleting ? (
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  variant="ghost"
+                  colorScheme="gray"
+                  aria-label="See menu"
+                  icon={<BsThreeDotsVertical />}
+                />
+
+                <MenuList>
+                  <MenuItem as={Link} to={`/posts/${id}/edit`}>
+                    Edit
+                  </MenuItem>
+                  <MenuItem color="red.400" onClick={handleDeleteClick}>
+                    Delete
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : (
+              <Spinner size="sm" />
+            ))}
         </Flex>
       </CardHeader>
       <CardBody>
-        <Heading mb="8px" size="lg">
+        <Heading mb="8px" size="lg" as={Link} to={`/posts/${id}`}>
           {title}
         </Heading>
         <Text>{excerpt}</Text>
       </CardBody>
-      <Image
-        objectFit="cover"
-        src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-        alt="Chakra UI"
-      />
+      {image && <Image objectFit="cover" src={image} alt={title} />}
 
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
         sx={{
-          '& > button': {
-            minW: '136px',
+          "& > button": {
+            minW: "136px",
           },
         }}
       >
-        <Button flex="1" variant="ghost" leftIcon={<BiLike />}>
-          Like
+        <Button
+          flex="1"
+          variant="ghost"
+          leftIcon={<BiLike />}
+          onClick={handleLikeClick}
+          colorScheme={isLiked ? "blue" : "gray"}
+          isLoading={isLikeLoading}
+        >
+          Like ({likesCount})
         </Button>
         <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
           Share
@@ -72,7 +150,14 @@ function PostCard({ title, excerpt, author }) {
 PostCard.propTypes = {
   title: PropTypes.string.isRequired,
   excerpt: PropTypes.string.isRequired,
+  image: PropTypes.string,
   author: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
+  onLike: PropTypes.func.isRequired,
+  isLiked: PropTypes.bool.isRequired,
+  likesCount: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  createdAt: PropTypes.string.isRequired,
 };
 
 export default PostCard;

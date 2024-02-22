@@ -3,8 +3,8 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-} from '@chakra-ui/react';
-import PropTypes from 'prop-types';
+} from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 function InputField({ required, label, disabled, meta, ...inputProps }) {
   return (

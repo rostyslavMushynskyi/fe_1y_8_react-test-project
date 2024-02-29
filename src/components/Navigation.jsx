@@ -12,6 +12,7 @@ import NavigationLink from "./NavigationLink";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../redux/auth/authActions";
 import { selectUser } from "../redux/auth/authSelectors";
+import { useNavigate } from "react-router-dom";
 
 function Navigation() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -46,9 +47,11 @@ function Navigation() {
       <Stack gap="4px">
         <NavigationLink to="/feed">Feed</NavigationLink>
         <NavigationLink to="/trending">Trending</NavigationLink>
-        <NavigationLink to={`/users/${user.id}`}>
-          {user.username}
-        </NavigationLink>
+        {user && (
+          <NavigationLink to={`/users/${user.id}`}>
+            {user.username}
+          </NavigationLink>
+        )}
         <NavigationLink to="/create-post">+ Create Post</NavigationLink>
       </Stack>
     </>
